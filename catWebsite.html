@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Shop</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F8E5E5;
+            color: #F8E5E5;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100px;
+        }
+
+        #logo {
+            max-width: 200px;
+            margin-right: 120px;
+        }
+
+        #search-bar {
+            display: flex;
+            align-items: center;
+            transition: width 0.3s ease-in-out;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-right: 10px;
+            background-color: #f0f0f0;
+            color: #333;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        input[type="text"]:focus,
+        #search-bar:hover input[type="text"] {
+            outline: none;
+            width: 300px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            background-color: #F8E5E5;
+            padding: 15px 0;
+            text-align: center;
+            height: 25px;
+        }
+
+        nav a {
+            color: #FA255E;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #000000;
+        }
+
+        #rasmaslidakan {
+            position: relative;
+            width: 100%;
+            height: 800px;
+            overflow: hidden;
+        }
+
+        #rasmaslidakan img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #rasmaslidakan img.show {
+            opacity: 1;
+        }
+
+        #rasmaslidakan-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;  /*  way le akat ka la bashi saraway pagaka darkawe */
+        }
+
+        #rasmaslidakan-content {
+            z-index: 2;
+            font-family: monospace;
+            color: #FA255E;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            text-align: left;
+            position: relative;
+            margin-top: 10%;
+            padding-left: 5%;
+        }
+
+        #rasmaslidakan h1 {
+            font-size: 2em;  /* shewazy fontakaya bo jorakani browser */
+            margin-bottom: 10px;
+        }
+
+        .jorakani-pshila {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .jorakani-pshila-heading {
+            color: #FA255E;
+            margin-bottom: 20px; 
+        }
+
+        .kalupal-products1,
+        .kalupal-products2,
+        .kalupal-products3 {
+            display: flex;
+            justify-content: space-around;
+            background-color: #F8E5E5;
+            padding: 30px;
+            margin-bottom: 30px;
+            gap: 100px;
+            
+        }
+
+        .kalupal1,
+        .kalupal2,
+        .kalupal3 {
+            color: #C39EA0;
+            border: 1px solid #FA255E;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.012);
+            transition: transform 0.3s ease;
+            width: 100%;
+            max-width: 5000px;
+            height: 400px;
+            padding: 100px;
+            
+            
+        }
+
+        .kalupal1:hover,
+        .kalupal2:hover,
+        .kalupal3:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 15px rgba(215, 95, 211, 0.164);
+            filter: brightness(110%);
+        }
+
+        .kalupal1 img,
+        .kalupal2 img,
+        .kalupal3 img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50px;
+            box-shadow: 0 0 10px rgba(237, 120, 190, 0.121);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+            object-fit: cover;
+            object-position: center center;
+        }
+
+        .kalupal1 img::before,
+        .kalupal2 img::before,
+        .kalupal3 img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(226, 53, 203, 0.899);
+            border-radius: 20px;
+        }
+
+        .kalupal1 img:hover::before,
+        .kalupal2 img:hover::before,
+        .kalupal3 img:hover::before {
+            background: rgba(171, 24, 125, 0.881);
+        }
+
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 20px; 
+        }
+        
+        .section-heading h2 {
+            color: #FA255E;
+            font-size: 24px;
+        }
+        
+        .section-jyakarawa {
+            border: 1px solid #FA255E;
+            width: 50px;
+            margin: 10px auto;
+        }
+
+
+        .cat-kalupalpshila {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0; 
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .kalupal-sht p {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #FA255E;
+        }
+
+        .kalupal-sht h3 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #FA255E;
+        }
+        
+        .kalupal-sht {
+            text-align: center;
+            margin: 20px; 
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .kalupal-sht img {
+            width: 180px; 
+            height: 170px; 
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(226, 67, 181, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+        }
+        
+        .kalupal-sht img:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 15px rgba(219, 59, 205, 0.5);
+            filter: brightness(110%);
+        }
+
+
+        .shtkrin {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #FA255E; 
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        
+        .shtkrin:hover {
+            background-color: #C39EA0 ; 
+        }
+
+        
+        
+.linynewan-history-kalupal {
+    width: 100%;
+    height: 5px; 
+    background: linear-gradient(to right, #ff8c00, #ff0080); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    margin: 20px 0;
+    border: none;
+    border-radius: 5px; 
+    opacity: 0.8; 
+    transition: all 0.3s ease-in-out; 
+}
+
+.linynewan-history-kalupal:hover {
+    background: linear-gradient(to right, #FA255E , #000000); 
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); 
+    opacity: 1; 
+}
+  
+
+        .history {
+            background-color: #F8E5E5 ;
+            color: #FA255E;
+            padding: 40px;
+            text-align: center;
+        }
+
+        footer {
+            background-color: #F8E5E5 ;
+            color:  #FA255E;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #shop-cart {
+            font-size: 35px;
+            color: #FA255E;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .flip-container {
+            perspective: 1000px;
+            display: inline-block;
+        }
+
+        .flip-container:hover .halgaranawa,
+        .flip-container.hover .halgaranawa {
+            transform: rotateY(180deg);
+        }
+
+        .flip-container,
+        .bashi-peshawa,
+        .bashi-dwawa {
+            width: 200px;
+            height: 300px;
+        }
+
+        .halgaranawa {
+            transition: 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .bashi-peshawa,
+        .bashi-dwawa {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .bashi-peshawa {
+            z-index: 2;
+            transform: rotateY(0deg);
+        }
+
+        .bashi-dwawa {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div id="search-bar">
+            <input type="text" placeholder="گەڕان...">             <!-- bashi -->
+        </div>
+        <img id="logo" src="catlogo.jpg" alt="logoy pshila">          
+        <div id="shop-cart">&#128722;</div>
+    </header>
+
+    <nav>
+        <a href="#">سەرەکی</a>
+        <a href="#">بازارکردن</a>
+        <a href="#">کەلوپەلەکان</a>
+        <a href="#">یارییەکان</a>
+        <a href="#">دەربارەی ئێمە</a>
+        <a href="#">پەیوەندی کردن</a>
+    </nav>
+
+    <section id="rasmaslidakan">
+        <img src="https://getwallpapers.com/wallpaper/full/c/7/a/1179783-large-cat-hd-wallpapers-1080p-1920x1080.jpg" alt="Slide 1" class="show">
+        <img src="https://getwallpapers.com/wallpaper/full/1/6/1/1179799-top-cat-hd-wallpapers-1080p-1920x1080-smartphone.jpg" alt="Slide 2">
+        <img src="https://getwallpapers.com/wallpaper/full/9/7/0/1180215-new-cat-hd-wallpapers-1080p-1920x1080.jpg" alt="Slide 3">
+        <img src="https://images.pexels.com/photos/2061057/pexels-photo-2061057.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="slide 4">
+        <img src="https://images.pexels.com/photos/208773/pexels-photo-208773.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="slide 5">
+        <img src="https://images.pexels.com/photos/127027/pexels-photo-127027.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="slide 6">
+        <div id="rasmaslidakan-overlay"></div>
+        <div id="rasmaslidakan-content">
+            <h1>بەخێربێن بۆ ماڵپەری پشیلەکەم</h1>
+            <h3>لێرەوە دەتوانن پشیلەی دلخوازی خۆتان بەدەست بێنن، لەگەڵ هەموو جۆرە یاری و پێداویستییەکانیان</h3>
+        </div>
+    </section>
+
+    <section class="jorakani-pshila">
+        <div class="jorakani-pshila-heading">
+            <h2> جۆرەکانی پشیلە </h2>
+        </div>
+
+        
+        <section class="kalupal-products1">
+
+
+            <div class="kalupal1 flip-container">
+                <div class="halgaranawa">
+                    <div class="bashi-peshawa">
+                        <img src="https://getwallpapers.com/wallpaper/full/4/5/c/1179581-gorgerous-cat-hd-wallpapers-1080p-1920x1200.jpg" alt="Product 1">
+                    </div>
+                    <div class="bashi-dwawa">
+                        <h1> ناو: سنۆوی <br>
+                            تەمەن: ١٨ مانگ  <br>
+                            شوێن: مالیزیا  <br>
+                            $نرخی:١٥٠$ </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kalupal1 flip-container">
+                <div class="halgaranawa">
+                    <div class="bashi-peshawa">
+                        <img src="https://images.pexels.com/photos/977935/pexels-photo-977935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 2">
+                    </div>
+                    <div class="bashi-dwawa">
+                        <h1> ناو : لولو <br>
+                            تەمەن : ٢ ساڵ <br>
+                            شوێن : سوید    <br>
+                            ڕەگەز: مێ    <br>
+                            نرخی : $٣٠٠ </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kalupal1 flip-container">
+                <div class="halgaranawa">
+                    <div class="bashi-peshawa">
+                        <img src="https://images.pexels.com/photos/3687957/pexels-photo-3687957.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 3">
+                    </div>
+                    <div class="bashi-dwawa">
+                        <h1> ناو : لاس <br>
+                            تەمەن :  ٥ ساڵ <br>
+                            شوێن : ئەڵمامی    <br>
+                            ڕەگەز: نێر   <br>
+                            نرخی : ٥٠٠$ </h1>
+                    </div>
+                </div>
+            </div>
+            </section>
+            
+
+            <!-- producty dwam-->
+
+            <section class="kalupal-products2">
+                <div class="kalupal1 flip-container">
+                    <div class="halgaranawa">
+                        <div class="bashi-peshawa">
+                            <img src="https://images.pexels.com/photos/1366996/pexels-photo-1366996.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 4">
+                        </div>
+                        <div class="bashi-dwawa">
+                            <h1> ناو : بێلا <br>
+                                تەمەن : ٣ ساڵ <br>
+                                شوێن : بەریتانیا    <br>
+                                ڕەگەز: مێ    <br>
+                                نرخی : $٢٠٠ </h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kalupal1 flip-container">
+                    <div class="halgaranawa">
+                        <div class="bashi-peshawa">
+                            <img src="https://images.pexels.com/photos/1444751/pexels-photo-1444751.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 5">
+                        </div>
+                        <div class="bashi-dwawa">
+                            <h1> ناو : ئیلیانا <br>
+                                تەمەن :  ٤ ساڵ <br>
+                                شوێن : بەلجیکا    <br>
+                                ڕەگەز: مێ    <br>
+                                نرخی : $٢٥٠</h1>
+                        </div>
+                    </div>
+                </div>
+
+                
+                </section>
+
+                <!-- producty seyam -->
+
+                <section class="kalupal-products3">
+                    <div class="kalupal1 flip-container">
+                        <div class="halgaranawa">
+                            <div class="bashi-peshawa">
+                                <img src="https://images.pexels.com/photos/2083940/pexels-photo-2083940.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 6">
+                            </div>
+                            <div class="bashi-dwawa">
+                                <h1> ناو : نونە <br>
+                                    تەمەن : ٢ ساڵ <br>
+                                    شوێن : سوید    <br>
+                                    ڕەگەز: مێ    <br>
+                                    نرخی : $٣٠٠ </h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+                </section>    
+
+     
+        <div class="section-heading">
+            <h2>پێداویستییەکان</h2>
+            <hr class="section-jyakarawa"> 
+        </div>
+        
+    <section class="cat-kalupalpshila">
+      
+        <div class="kalupal-sht">
+            <img src="https://th.bing.com/th/id/OIP.XyZJTzTit5QXV2jQaSu4CgHaJK?w=155&h=192&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Cat Accessory 1">
+            <h3> سپرینگی یاری کردن </h3>
+            
+        </div>
+
+        <div class="kalupal-sht">
+            <img src="https://fishsubsidy.org/wp-content/uploads/2020/02/cat-accessories-768x591.jpg" alt="Cat Accessory 2">
+            <h3>شوێنی خەوتن</h3>
+            
+        </div>
+
+        <div class="kalupal-sht">
+            <img src="https://th.bing.com/th/id/R.733b508687c29801e8b38e3ac3229258?rik=eLVnLaMeEpIjSg&pid=ImgRaw&r=0" alt="Cat Accessory 3">
+            <h3> بۆ خۆ خوراندن </h3>
+            
+        </div>
+
+        <div class="kalupal-sht">
+            <img src="https://m.media-amazon.com/images/I/61zCLOS5q5L.jpg" alt="Cat Accessory 4">
+            <h3>بۆکسی خەوتن</h3>
+            
+        </div>
+
+        <div class="kalupal-sht">
+            <img src="https://i.ebayimg.com/images/g/SuIAAOSwrO9l4ATL/s-l1600.jpg" alt="Cat Accessory 5">
+            <h3>بوکەڵەی یاری</h3>
+            
+        </div>
+
+        <div class="kalupal-sht">
+            <img src="https://th.bing.com/th/id/OIF.GYarplj8KwgoKTxkpzm6wg?rs=1&pid=ImgDetMain" alt="Cat Accessory 6">
+            <h3>کەلوپەلی یاری کردن</h3>
+            
+        </div>
+
+        <div class="kalupal-sht">
+            <img src="https://i.ebayimg.com/images/g/UhUAAOSw4cFl3q9y/s-l1600.jpg" alt="Cat Accessory 7">
+            <h3>پەپولەی هەلواسراو</h3>
+            
+        </div>
+
+        <div class="kalupal-sht">
+            <img src="https://th.bing.com/th/id/OIP.GMsjlwdO-5m2i4uqsPcv5wHaHa?w=1000&h=1000&rs=1&pid=ImgDetMain" alt="Cat Accessory 8">
+            <h3>گوڵی یاری کردن</h3>
+            
+        </div>
+
+    </section>
+    <section class="shtkrin">
+        
+        <a href="#shop-now" class="shtkrin">بازارکردن</a>
+    </section>
+    <br>
+    <br>
+
+ <hr class="linynewan-history-kalupal">
+
+    <br>
+    <br>
+    <br>
+   
+    <section class="history">
+        <h2> !دەربارەی ئێمە</h2>
+        <p>................</p>
+    </section>
+
+    <br>
+    <br>
+    <hr class="linynewan-history-kalupal">
+    <br>
+    <br>
+    <br>
+
+    <footer>
+        <p>&copy; 2024 Cat Shop</p>
+    </footer>
+
+    <script>
+        let currentImage = 0;
+        const images = document.querySelectorAll('#rasmaslidakan img');
+
+        function showImage(index) {
+            images.forEach((image, i) => {
+                image.classList.toggle('show', i === index);
+            });
+        }
+
+        function nextImage() {
+            currentImage = (currentImage + 1) % images.length;
+            showImage(currentImage);
+        }
+
+        setInterval(nextImage, 5000); // 5 sanya jarek agoret
+    </script>
+
+</body>
+</html>
